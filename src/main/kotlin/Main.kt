@@ -1,9 +1,8 @@
 import okhttp3.*
+import retrofit2.Retrofit
 import java.io.File
 import java.net.InetSocketAddress
 import java.net.Proxy
-import java.net.ProxySelector
-import java.net.URI
 import java.util.concurrent.TimeUnit
 
 fun main(args: Array<String>) {
@@ -15,19 +14,12 @@ fun main(args: Array<String>) {
     }.build()
     println("http client on socks proxy created")
 
-    val imgPath = "img-original/img/2023/04/05/07/00/17/106879191_p0.png"
+    val api = PixivApi.create(client)
+    val resp = api.getImgOrigin("2023/04/05/07/00/17/106879191_p0.png").execute()
+    println("http response got, code is [${resp.code()}]")
 
-    val request = Request.Builder().apply {
-        url("https://i.pximg.net/${imgPath}")
-        addHeader("referer", "https://www.pixiv.net/")
-    }.build()
-    println("http request created [${request.headers}]")
-
-    val resp = client.newCall(request).execute()
-    println("http response got, code is [${resp.code}]")
-
-    if (resp.code == 200) {
-        val bytes = resp.body?.bytes() ?: ByteArray(0)
+    if (resp.code() == 200) {
+        val bytes = resp.body()?.bytes() ?: ByteArray(0)
         File("D:/tmp/zzz.png").apply {
             parentFile.mkdirs()
             writeBytes(bytes)
