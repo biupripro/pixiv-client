@@ -1,3 +1,3 @@
 
-rootProject.name = "kotlin-tmp"
+rootProject.name = "pixiv-client"
 
