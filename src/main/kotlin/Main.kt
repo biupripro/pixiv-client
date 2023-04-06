@@ -1,5 +1,4 @@
 import okhttp3.*
-import retrofit2.Retrofit
 import java.io.File
 import java.net.InetSocketAddress
 import java.net.Proxy
@@ -14,8 +13,10 @@ fun main(args: Array<String>) {
     }.build()
     println("http client on socks proxy created")
 
-    val api = PixivApi.create(client)
-    val resp = api.getImgOrigin("2023/04/05/07/00/17/106879191_p0.png").execute()
+//    val api = PixivApi.create(client)
+//    val resp = api.getImgOrigin("2023/04/05/07/00/17/106879191_p0.png").execute()
+    val api = PixivIllustrationApi.create(client)
+    val resp = api.detailOf("106902572").execute()
     println("http response got, code is [${resp.code()}]")
 
     if (resp.code() == 200) {
